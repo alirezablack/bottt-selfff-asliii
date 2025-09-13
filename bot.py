@@ -6,7 +6,6 @@ from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from telethon.network import ConnectionTcpFull
 
-# ======== CONFIG ========
 api_id = 28069133
 api_hash = "5ca91588221d1dd9c46d0df1dd4768f0"
 string = "1BJWap1wBu7AMLcM8YumTHN2HUJ7o-C5mY-XnfHMD07KKPyuTWouHeUOr_KrsoQQRJeHUub3RFh3hj93eGXaUlcGEjyetFZ4LjyPSsd1_NET-7WL9c2T7agmeZNTKiR6HwpaLdaY2wgnkyFzkNKP5dxE3jlF6t8FN3BzdlJ5poVI0q0WiLJXLQRxq5lgDd3_D8RXyRx2gXtZ2D6-lhnlgD0x3-jqbGtlZ24tApeJw1CPgxECMaelm6yaQRpyUdQskZ0qbQvyj8BsT8yM9DUV30tSr8tsB-Ku44cvrE3hGhbPfsE6VaBhRXW8EpQD8rrTBhdtlw9nSYTbGmpXtO9PD3DDmTz6HbuM="
@@ -15,7 +14,6 @@ save_path = "SavedMessages"
 cache_file = "message_cache.json"
 os.makedirs(save_path, exist_ok=True)
 
-# ======================= TELEGRAM CLIENT ========
 client = TelegramClient(StringSession(string), api_id, api_hash, connection=ConnectionTcpFull)
 
 if os.path.exists(cache_file):
@@ -128,11 +126,11 @@ async def run_bot():
     except Exception as e:
         logging.error(f"❌ خطای اصلی: {repr(e)}")
 
-# این خط مهمه — فقط برای اجرای مستقیم — ولی ما از طریق Render اجرا می‌کنیم
-# asyncio.run(run_bot()) ← این خط رو حذف کردیم!
-
-if __name__ == "__main__":
-    # اینجا یه حلقه بی‌نهایت می‌زنیم تا Render متوجه بشه این یه پروسس زنده هست!
-    # (برای جلوگیری از خوابیدن Worker)
-    while True:
+# 🚀 حلقه بی‌نهایت برای جلوگیری از خوابیدن Worker
+while True:
+    try:
         asyncio.run(run_bot())
+    except Exception as e:
+        logging.error(f"🔁 ربات خطا خورد، دوباره راه‌اندازی می‌شه... {repr(e)}")
+        import time
+        time.sleep(10)  # 10 ثانیه صبر کن بعد دوباره اجرا شه
